@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speciální pozvánka</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+        🌙
+    </button>
+    <button class="lang-toggle" onclick="toggleLang()" id="langBtn">
+        CZ
+    </button>
+    <div class="card">
+        <h1>
+            <h1 id="title">Mám pro tebe něco malého 🎁</h1>
+        </h1>
+        <p id="subtitle">Stačí kliknout… 🙂</p>
+
+        <button onclick="showTicket()" id="openBtn">Otevřít překvapení 🎁</button>
+        <div class="ticket hidden" id="ticket" class="ticket">
+            <h2 id="ticketTitle">🎟️ Vstupenka do zoo</h2>
+            <p id="motto">Protože zoo by neměla zůstat jen plánem…</p>
+            <p id="companion"><strong>Doprovod:</strong> Viktor 😄</p>
+            <p id="validity"><strong>Platnost:</strong> až bude hezky 🙂</p>
+            <p id="dresscode"><strong>Dresscode:</strong> něco, v čem ti to bude slušet</p>
+
+            <a href="tabulky.pdf" download class="download-btn">
+                <button id="downloadBtn">Stáhnout vstupenku 📄</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showTicket() {
+            document.getElementById("ticket").classList.add("show");
+        }
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById("themeBtn");
+
+            body.classList.toggle("dark");
+
+            // animace
+            btn.classList.add("rotate");
+
+            setTimeout(() => {
+                btn.classList.remove("rotate");
+
+                // změna ikonky
+                if (body.classList.contains("dark")) {
+                    btn.innerText = "☀️";
+                    localStorage.setItem("theme", "dark");
+                } else {
+                    btn.innerText = "🌙";
+                    localStorage.setItem("theme", "light");
+                }
+            }, 200);
+        }
+
+        window.onload = () => {
+            const savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark");
+                document.getElementById("themeBtn").innerText = "☀️";
+            }
+        };
+
+        let currentLang = localStorage.getItem("lang") || "cz";
+
+        const translations = {
+            cz: {
+                title: "Mám pro tebe něco malého 🎁",
+                subtitle: "Stačí kliknout… 🙂",
+                openBtn: "Otevřít překvapení 🎁",
+                ticketTitle: "🎟️ Vstupenka do zoo",
+                motto: "Protože zoo by neměla zůstat jen plánem…",
+                companion: "<strong>Doprovod:</strong> Viktor 😄",
+                validity: "<strong>Platnost:</strong> až bude hezky 🙂",
+                dresscode: "<strong>Dresscode:</strong> něco, v čem ti to bude slušet",
+                downloadBtn: "Stáhnout vstupenku 📄"
+            },
+            ua: {
+                title: "У мене є для тебе маленький сюрприз 🎁",
+                subtitle: "Просто натисни… 🙂",
+                openBtn: "Відкрити сюрприз 🎁",
+                ticketTitle: "🎟️ Квиток до зоопарку",
+                motto: "Бо зоопарк не має залишитися лише планом…",
+                companion: "<strong>Супровід:</strong> Viktor 😄",
+                validity: "<strong>Дійсний:</strong> коли буде гарна погода 🙂",
+                dresscode: "<strong>Дрескод:</strong> щось, у чому тобі буде гарно",
+                downloadBtn: "Завантажити квиток 📄"
+            }
+        };
+
+        function applyLang(lang) {
+            document.getElementById("title").innerText = translations[lang].title;
+            document.getElementById("subtitle").innerText = translations[lang].subtitle;
+            document.getElementById("openBtn").innerText = translations[lang].openBtn;
+            document.getElementById("ticketTitle").innerText = translations[lang].ticketTitle;
+
+            document.getElementById("motto").innerText = translations[lang].motto;
+
+            document.getElementById("companion").innerHTML = translations[lang].companion;
+            document.getElementById("validity").innerHTML = translations[lang].validity;
+            document.getElementById("dresscode").innerHTML = translations[lang].dresscode;
+
+            document.getElementById("downloadBtn").innerText = translations[lang].downloadBtn;
+
+            localStorage.setItem("lang", lang);
+        }
+
+        function toggleLang() {
+            const current = localStorage.getItem("lang") || "cz";
+            const newLang = current === "cz" ? "ua" : "cz";
+
+            applyLang(newLang);
+
+            document.getElementById("langBtn").innerText = newLang.toUpperCase();
+        }
+
+        // načtení při startu
+        window.onload = function () {
+            applyLang(currentLang);
+
+            const theme = localStorage.getItem("theme");
+            if (theme === "dark") {
+                document.body.classList.add("dark");
+            }
+        };
+
+    </script>
+
+</body>
+
+</html>
